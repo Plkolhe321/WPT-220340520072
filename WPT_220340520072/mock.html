@@ -1,0 +1,139 @@
+<html>
+<body>
+
+<!-- <form action="poc2" method="get">
+<Br/>whocares<input type="text" name="whocares"/>
+<input type="submit" value="get"/>
+</form>
+
+
+<form action="poc1" method="post">
+<Br/>whocares<input type="text" name="whocares"/>
+<input type="submit" value="post"/>
+</form> -->
+
+<input type="text" id="bookid" placeholder="Book id"/><span id="message">Message</span><br><br>
+<input type="text" id="bookname" placeholder="Book name"/><br><br>
+<input type="text" id="price" placeholder="Book price"/><br><br>
+
+<button id="add">Add a Book</button><hr>
+<p id="content">Show all here.</p>
+
+
+</body>
+
+<script src="jquery-3.5.1.min.js"></script>
+
+<script>//our script will come here 
+
+
+
+$(document).ready(function()
+{
+console.log("DOM content loaded.....");
+// $.ajax({
+// 			data:$("#bookid").val(),
+// 			url: "http://localhost:8081/getAllBook",
+// 			type:"get",
+// 			dataType:'json',
+// 			success:(output)=>{
+// 				showContents(output);
+// 			},
+// 			error:(error)=>{
+// 				console.log("Error occured "+error);
+// 			}
+			
+
+// 	});
+
+$("#bookid").blur(function () 
+	{ 
+		console.log("Blur function works well");
+		let input = {x:$("#bookid").val()};
+		console.log(input);
+		$.ajax({
+			data:input,
+			url: "http://localhost:8081/getBook",
+			type:"get",
+			dataType:'json',
+			success:(output)=>{
+				if(output.status){
+					// $("#message").text("Book already present.");
+					$("#bookname").val(output.bookdetails.bookname);
+					$("#price").val(output.bookdetails.price);
+					showContents(output);
+				}else{
+					$("#message").text("Book not found.");
+					$("#bookname").val("");
+					$("#price").val("");
+					showContents(output);
+				}
+			},
+			error:(error)=>{
+				console.log("Error occured "+error);
+			}
+			
+
+	});
+	});
+
+$("#add").click(function () 
+	{ 
+		console.log("Click function works well");
+		let input = {x:$("#bookid").val(), y:$("#bookname").val(), z:$("#price").val()};
+
+		$.ajax({
+			data:input,
+			url: "http://localhost:8081/addBook",
+			type:"get",
+			dataType:'json',
+			success:(output)=>{
+				if(output){
+					$("#message").text("Book added successfully.");
+					$("#bookname").val("");
+					$("#price").val("");
+					showContents(output);
+				}else{
+					$("#message").text("Failed.");
+					showContents(output);
+				}
+			},
+			error:(error)=>{
+				console.log("Error occured "+error);
+			}
+
+	});
+	});
+
+	// showContents(output);
+	function showContents(output){
+		$.ajax({
+			data:{},
+			url: "http://localhost:8081/getAllBook",
+			type:"get",
+			dataType:'json',
+			success:(output)=>{
+				let s ="";
+
+	for(let i=0; i<output.length; i++){
+	s +=  output[i].bookid+" "+output[i].bookname+" "+output[i].price+" , ";
+	
+	}
+	$("#content").html(s);
+},error:(error)=>{
+				console.log("Error occured "+error);
+			}
+				
+				
+		}
+			
+		
+
+	);
+		}
+	
+
+</script>
+
+
+</html>
