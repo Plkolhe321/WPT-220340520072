@@ -79,7 +79,7 @@ app.get('/addBook', function (req, res) {
     
 		// let input = req.query.x;
 
-        console.log("reading input " + input);
+        // console.log("reading input " + input);
 		let output = {bookdetails:{bookid:0, bookname:"", price: 0}};
     	con.query('select * from book',[],(error,rows)=>{
 			if(error){
